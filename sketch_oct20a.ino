@@ -1,3 +1,4 @@
+//commit
 /*a genius code manual
  * 1[1 - 2] - FLASHLIGTHS MODE
  * 11 - FLASHLIGHTS ON
@@ -6,6 +7,8 @@
  * 2[1 - 5] - SET MOTORS SPEED
  * 26 - 1ST MOTORS TRAECTORY
  * 27 - 2ND MOTORS TRAECTORY
+ * 28 - TURN RIGHT
+ * 29 - TURN LEFT
  * 3[1-8] - ULTRASOUND MODE, SET TIME (ITERATIONS COUNT)
  * 39 - INFINITY US MODE
  * 4[1-8] - ULTRASOUND MODE, SET TIME (ITERATIONS COUNT)
@@ -15,7 +18,7 @@
  */
 
 
-
+#include <GyverEncoder.h>
 #include <avr/sleep.h>
 #include <avr/power.h>
 #include <Wire.h>
@@ -55,6 +58,7 @@ int motor4A = 7;
 int speed1 = 250; // speed 1 - 255
 int speed2 = 250; // speed 1 - 255
 
+
 uint32_t timer;
 
 void setup() {
@@ -73,6 +77,7 @@ void setup() {
   Wire.begin();
   timer = micros();
   accelgyro.initialize();
+
 }
 
 void loop() {  
@@ -117,6 +122,16 @@ void loop() {
         } else if (inp == 7) {
           digitalWrite(motor1A, LOW);
           digitalWrite(motor2A, HIGH);
+          digitalWrite(motor3A, LOW);
+          digitalWrite(motor4A, HIGH);
+        } else if (inp == 8) {
+          digitalWrite(motor1A, LOW);
+          digitalWrite(motor2A, HIGH);
+          digitalWrite(motor3A, HIGH);
+          digitalWrite(motor4A, LOW);
+        } else if (inp == 9) {
+          digitalWrite(motor1A, HIGH);
+          digitalWrite(motor2A, LOW);
           digitalWrite(motor3A, LOW);
           digitalWrite(motor4A, HIGH);
         }
@@ -164,9 +179,8 @@ void loop() {
          }
        }
     } else if (globalInp == 5) {
-      cli();
-      sleep_enable();
-      sleep_cpu();
+      analogWrite(motorsEn_12, 0);
+      analogWrite(motorsEn_34, 0);
     }
   }
 }
